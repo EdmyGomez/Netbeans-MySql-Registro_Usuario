@@ -334,7 +334,7 @@ public class Registro extends javax.swing.JFrame {
         } 
         
     }//GEN-LAST:event_ButtonRegistrarActionPerformed
-
+//limpiar
     public void limpiarcajas(){
         txtid.setText(null);
         txtnombre.setText(null);
