@@ -28,12 +28,14 @@ import javax.swing.table.DefaultTableModel;
  * @author edgo1
  */
 public class Registro extends javax.swing.JFrame {
-    
+    // Configuracion de la conexion de mi base de datos, puerto, usuario, y contraseña
     public static  String URL = "jdbc:mysql://127.0.0.1:3306/registro_personas";
     public static  String usuario = "root";
     public static  String contraseña = "admin";
     
+    //Preparacion de la ejecucion de consultas parametrizadas en SQL
     PreparedStatement ps;
+    //Resultados de ejecutar una consulta SQL
     ResultSet rs;
 
     
@@ -283,7 +285,7 @@ public class Registro extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Los datos no fueron Actualiados");
             }
             
-        } catch (SQLException | IllegalArgumentException ex) {
+        } catch (SQLException | IllegalArgumentException | HeadlessException | NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "No hay datos a modificar");
         }
     }//GEN-LAST:event_ModificarActionPerformed
@@ -298,8 +300,17 @@ public class Registro extends javax.swing.JFrame {
         try{
         ps = conexion.prepareStatement("delete from persona where identificacion = ?");
         ps.setInt(1, Integer.parseInt(txtbuscar.getText()));
-        }catch (SQLException ex){
-            java.util.logging.Logger.getLogger(Registro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        
+        int resultado =ps.executeUpdate();
+            if (resultado>0) {
+                JOptionPane.showMessageDialog(null, "Se han Eliminado los datos correctamente");
+                limpiarcajas();
+            }else{
+                JOptionPane.showMessageDialog(null, "No se han podido eliminar los datos");
+            }
+                
+        }catch (SQLException | NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Por favor digite el numero de cedula para borrar el registro");
         }
     }//GEN-LAST:event_EliminarActionPerformed
 
@@ -341,6 +352,7 @@ public class Registro extends javax.swing.JFrame {
         sexo.clearSelection();
         ec.setSelectedItem(null);
         fechan.setText(null);
+        txtbuscar.setText(null);
     }
     
     private void ButtonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLimpiarActionPerformed
